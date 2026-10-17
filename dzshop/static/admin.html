@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - orders</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1c1e21; --muted:#65676b; --line:#e2e4e8; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#18191a; --card:#242526; --text:#e4e6eb; --muted:#b0b3b8; --line:#3a3b3c; } }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.4 system-ui,sans-serif; padding:16px; }
+  h1 { font-size:20px; } h2 { font-size:16px; margin-top:28px; } a { color:#0084ff; }
+  .wrap { overflow-x:auto; background:var(--card); border-radius:8px; }
+  table { border-collapse:collapse; width:100%; min-width:640px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--muted); font-weight:600; font-size:13px; }
+  .tag { padding:2px 8px; border-radius:10px; font-size:12px; background:#8883; }
+  .pending_confirmation { background:#f7b92855; } .confirmed, .shipped { background:#0084ff44; } .delivered { background:#31a24c55; } .cancelled { background:#e4192b44; }
+  button { font:inherit; font-size:13px; }
+</style>
+</head>
+<body>
+<h1>Orders &amp; confirmation status <small>(demo data) · <a href="/">chat</a></small></h1>
+<div class="wrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Phone</th><th>Wilaya</th><th>Total (DA)</th><th>Status</th><th>Shipment</th><th></th></tr></thead><tbody id="o"></tbody></table></div>
+<h2>Escalations to a human</h2>
+<div class="wrap"><table><thead><tr><th>#</th><th>Session</th><th>Reason</th><th>When</th></tr></thead><tbody id="e"></tbody></table></div>
+<script>
+function cell(tr, text, cls) { const td = document.createElement('td'); const s = cls ? Object.assign(document.createElement('span'), {className: 'tag ' + cls}) : td; s.textContent = text ?? ''; if (cls) td.appendChild(s); tr.appendChild(td); return td; }
+async function load() {
+  const orders = await (await fetch('/api/orders')).json();
+  const o = document.getElementById('o'); o.replaceChildren();
+  for (const r of orders) {
+    const tr = document.createElement('tr');
+    cell(tr, r.order_id); cell(tr, r.name); cell(tr, r.phone); cell(tr, r.wilaya); cell(tr, r.total_dzd);
+    cell(tr, r.status.replace('_', ' '), r.status);
+    cell(tr, r.tracking_code ? r.tracking_code + ' · ' + r.stage : '—');
+    const td = cell(tr, '');
+    if (r.tracking_code && r.stage !== 'delivered') {
+      const b = document.createElement('button'); b.textContent = 'Advance shipment';
+      b.onclick = async () => { await fetch('/api/orders/' + r.order_id + '/advance', {method: 'POST'}); load(); };
+      td.appendChild(b);
+    }
+    o.appendChild(tr);
+  }
+  const esc = await (await fetch('/api/escalations')).json();
+  const e = document.getElementById('e'); e.replaceChildren();
+  for (const r of esc) { const tr = document.createElement('tr'); cell(tr, r.id); cell(tr, r.session_id); cell(tr, r.reason); cell(tr, r.created_at); e.appendChild(tr); }
+}
+load(); setInterval(load, 5000);
+</script>
+</body>
+</html>

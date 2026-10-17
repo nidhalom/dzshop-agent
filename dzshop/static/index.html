@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo shop chat</title>
+<style>
+  :root { --bg:#f0f2f5; --card:#fff; --me:#0084ff; --bot:#e4e6eb; --text:#1c1e21; --muted:#65676b; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#18191a; --card:#242526; --bot:#3a3b3c; --text:#e4e6eb; --muted:#b0b3b8; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.4 system-ui,sans-serif; height:100dvh; display:flex; flex-direction:column; }
+  header { background:var(--card); padding:12px 16px; border-bottom:1px solid #8884; display:flex; justify-content:space-between; align-items:center; }
+  header b { display:block; } header small { color:var(--muted); }
+  header a { color:var(--me); font-size:14px; }
+  #log { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:8px; max-width:720px; width:100%; margin:0 auto; }
+  .m { max-width:82%; padding:9px 13px; border-radius:18px; white-space:pre-wrap; word-wrap:break-word; unicode-bidi:plaintext; }
+  .me { align-self:flex-end; background:var(--me); color:#fff; border-bottom-right-radius:4px; }
+  .bot { align-self:flex-start; background:var(--bot); border-bottom-left-radius:4px; }
+  .tools { align-self:flex-start; font-size:12px; color:var(--muted); margin:-4px 0 0 8px; }
+  form { background:var(--card); padding:10px 12px; display:flex; gap:8px; border-top:1px solid #8884; max-width:720px; width:100%; margin:0 auto; }
+  input { flex:1; font:inherit; padding:10px 14px; border-radius:20px; border:1px solid #8886; background:var(--bg); color:var(--text); }
+  button { font:inherit; border:0; border-radius:20px; padding:0 18px; background:var(--me); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<header>
+  <div><b>Boutique Démo Dzair (DEMO)</b><small id="mode">connecting…</small></div>
+  <a href="/admin">Admin</a>
+</header>
+<div id="log"></div>
+<form id="f"><input id="t" autocomplete="off" placeholder="Écrivez / اكتب / kteb…" dir="auto"><button>Send</button></form>
+<script>
+const log = document.getElementById('log'), t = document.getElementById('t');
+let cid = 'web-' + Math.random().toString(36).slice(2, 9);
+function add(text, cls) { const d = document.createElement('div'); d.className = cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; }
+async function send(msg) {
+  add(msg, 'm me');
+  try {
+    const r = await fetch('/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({customer_id: cid, message: msg}) });
+    const j = await r.json();
+    add(j.reply, 'm bot');
+    if (j.tool_calls.length) add('tools: ' + j.tool_calls.map(c => c.name).join(', '), 'tools');
+  } catch (e) { add('Network error', 'm bot'); }
+}
+document.getElementById('f').onsubmit = e => { e.preventDefault(); const v = t.value.trim(); if (v) { t.value = ''; send(v); } };
+fetch('/health').then(r => r.json()).then(j => { document.getElementById('mode').textContent = j.mode + ' mode · cash on delivery'; });
+add('Salam / Bonjour / مرحبا — try: "ch7al soum la montre?"', 'm bot');
+</script>
+</body>
+</html>

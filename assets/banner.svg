@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="DzShop — The AI shop assistant that speaks Darija">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03140d"/>
+      <stop offset="1" stop-color="#06301f"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#6ee7b7"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    .msg{opacity:0;animation:show 10s infinite}
+    .m2{animation-delay:1.5s}.m3{animation-delay:3s}.m4{animation-delay:4.5s}
+    @keyframes show{0%{opacity:0;transform:translateY(10px)}5%,80%{opacity:1;transform:translateY(0)}90%,100%{opacity:0}}
+    .bag{animation:bob 3s ease-in-out infinite;transform-origin:center}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .typing circle{animation:blink 1.2s infinite}
+    .typing circle:nth-child(2){animation-delay:.2s}.typing circle:nth-child(3){animation-delay:.4s}
+    @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+    text{font-family:'Segoe UI',Inter,Helvetica,Arial,sans-serif}
+  </style>
+  <rect width="1280" height="400" fill="url(#bg)"/>
+  <!-- flag accent -->
+  <rect x="0" y="0" width="10" height="400" fill="#16a34a"/>
+  <rect x="10" y="0" width="10" height="400" fill="#ffffff"/>
+  <circle cx="1240" cy="40" r="10" fill="#ef4444" filter="url(#glow)"/>
+
+  <!-- bag -->
+  <g transform="translate(95 120)"><g class="bag" filter="url(#glow)">
+    <path d="M10 50 H150 L138 190 H22 Z" fill="#34d399" fill-opacity=".15" stroke="#6ee7b7" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M45 70 V40 C45 0 115 0 115 40 V70" fill="none" stroke="#6ee7b7" stroke-width="5" stroke-linecap="round"/>
+    <path d="M80 105 L88 125 L110 127 L93 141 L99 163 L80 150 L61 163 L67 141 L50 127 L72 125 Z" fill="#ef4444"/>
+  </g></g>
+
+  <text x="300" y="170" font-size="104" font-weight="800" fill="url(#title)" filter="url(#glow)">DzShop</text>
+  <text x="304" y="222" font-size="32" fill="#a7f3d0">The AI shop assistant that speaks Darija.</text>
+
+  <!-- chat -->
+  <g font-size="19">
+    <g class="msg"><rect x="304" y="250" width="230" height="44" rx="22" fill="#064e3b" stroke="#34d399" stroke-opacity=".5"/><text x="324" y="278" fill="#ecfdf5">slm, ch7al hadi? 👀</text></g>
+    <g class="msg m2"><rect x="550" y="250" width="225" height="44" rx="22" fill="#064e3b" stroke="#34d399" stroke-opacity=".5"/><text x="570" y="278" fill="#ecfdf5">C'est dispo en M ?</text></g>
+    <g class="msg m3"><rect x="790" y="250" width="200" height="44" rx="22" fill="#064e3b" stroke="#34d399" stroke-opacity=".5"/><text x="890" y="278" text-anchor="middle" fill="#ecfdf5">كاين التوصيل؟</text></g>
+    <g class="msg m4"><rect x="304" y="310" width="520" height="44" rx="22" fill="#10b981"/><text x="326" y="338" fill="#022c22" font-weight="600">✅ Commande confirmée — paiement à la livraison</text></g>
+  </g>
+  <g transform="translate(850 332)"><g class="typing" fill="#6ee7b7">
+    <circle cx="0" cy="0" r="5"/><circle cx="16" cy="0" r="5"/><circle cx="32" cy="0" r="5"/>
+  </g></g>
+</svg>

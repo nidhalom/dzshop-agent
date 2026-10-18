@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/banner.svg" alt="DzShop — The AI shop assistant that speaks Darija" width="100%"></p>
+
 # dzshop-agent
 
 An AI customer-service and order agent for small Algerian e-commerce shops: it answers in Darija, Arabic or French, takes and confirms cash-on-delivery (COD) orders, tracks deliveries, and hands over to a human when needed.
